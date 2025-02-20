@@ -1,35 +1,17 @@
-import { useEffect, useState } from "react";
+import { useFetch } from "./use-fetch";
 
 type Pokemon = {
   name: string;
 };
 
 const PokemonList = () => {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>();
-
-  useEffect(() => {
-    const fetchPokemonData = async () => {
-      const params = new URLSearchParams({ limit: "10", offset: "0" });
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `https://pokeapi.co/api/v2/pokemon?${params}`
-        );
-        const data = await response.json();
-
-        setPokemons(data.results);
-        setIsLoading(false);
-      } catch (e) {
-        const errorMessage = (e as { message: string }).message;
-        setError(errorMessage);
-        setIsLoading(false);
-      }
-    };
-
-    fetchPokemonData();
-  }, []);
+  const { data, isLoading, error } = useFetch<{ results: Pokemon[] }>(
+    `https://pokeapi.co/api/v2/pokemon?${new URLSearchParams({
+      limit: "10",
+      offset: "0",
+    })}`
+  );
+  const pokemons = data?.results || [];
 
   if (isLoading) {
     return <p>Loading ...</p>;

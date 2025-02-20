@@ -7,7 +7,7 @@ import PokemonList from "../PokemonList";
 import { server } from "../testing/mock-server";
 import { http, HttpResponse } from "msw";
 
-describe("before hook", () => {
+describe("Pokemon List", () => {
   beforeEach(() => {
     server.use(
       http.get("https://pokeapi.co/api/v2/pokemon", () => {
